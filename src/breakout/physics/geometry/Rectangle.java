@@ -14,6 +14,17 @@ public class Rectangle implements Shape {
         this(new Point(x, y), new Dimension(width, height));
     }
 
+    @Override
+    public String toString() {
+        return String.format(
+                "{x=%.3f, y=%.3f, width=%.3f, height=%.3f}",
+                getX(),
+                getY(),
+                getWidth(),
+                getHeight()
+        );
+    }
+
     public boolean equals(Rectangle rectangle) {
         return getPosition().equals(rectangle.getPosition()) && getDimension().equals(rectangle.getDimension());
     }

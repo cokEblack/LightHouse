@@ -1,9 +1,13 @@
 package breakout.game.animation;
 
+import breakout.game.texture.Sprite;
+import breakout.physics.geometry.Rectangle;
 import breakout.util.Builder;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class AnimationBuilder implements Builder<Animation> {
 
@@ -21,6 +25,17 @@ public class AnimationBuilder implements Builder<Animation> {
     public AnimationBuilder addFrame(AnimationFrame frame) {
         frames.add(frame);
         return this;
+    }
+
+    public AnimationBuilder useSprite(Sprite sprite) {
+
+        sprite.getMapStrategy().getMappings().values().forEach(rect -> {
+            BufferedImage image = sprite.getImage((Rectangle) rect);
+            addFrame(new AnimationFrame(image));
+        });
+
+        return this;
+
     }
 
     @Override
