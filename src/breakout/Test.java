@@ -2,13 +2,23 @@ package breakout;
 
 
 import breakout.game.AbstractGame;
+import breakout.game.GameObjectBody;
 import breakout.game.animation.Animation;
 import breakout.game.animation.AnimationBuilder;
+import breakout.game.api.Ball;
+import breakout.game.api.Brick;
+import breakout.game.api.Level;
 import breakout.game.io.Keyboard;
 import breakout.game.state.GameState;
 import breakout.game.texture.AnimatedTexture;
 import breakout.game.texture.Sprite;
 import breakout.game.texture.SpriteDirectMapStrategy;
+import breakout.physics.Gravity;
+import breakout.physics.World;
+import breakout.physics.collision.CollisionEvent;
+import breakout.physics.collision.CollisionListener;
+import breakout.physics.geometry.Vector;
+import lighthouse.GreatestLevel;
 import lighthouse.RainbowBall;
 
 import javax.imageio.ImageIO;
@@ -20,28 +30,19 @@ public class Test {
 
     public static void main(String[] args) {
 
-        RainbowBall b = new RainbowBall();
+        Level level = new GreatestLevel();
 
-        try {
-
-            BufferedImage spriteImage = ImageIO.read(RainbowBall.class.getResource("resources/sprite.png"));
-
-            Sprite sprite = new Sprite(spriteImage, new SpriteDirectMapStrategy() {{
-                setMapping("Frame 1", 0, 0, 100, 100);
-                setMapping("Frame 2", 100, 0, 100, 100);
-                setMapping("Frame 3", 200, 0, 100, 100);
-            }});
-
-            Animation anim = (new AnimationBuilder(1000))
-                    .useSprite(sprite)
-                    .build();
-
-            b.setTexture(new AnimatedTexture(anim));
+        World w = new World(640, 480, new Gravity(new Vector(0, 1)));
+        Ball b = level.getBall();
+        b.getBody().setPosition(100, 100);
+        w.addBody(b.getBody());
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        Brick brick = level.getBricks().get(0).create();
+        brick.getBody().setPosition(16,16);
+        w.addBody(brick.getBody());
+
 
         AbstractGame g = new AbstractGame() {
             @Override
@@ -70,8 +71,15 @@ public class Test {
 
         g.getWindow().addKeyListener(new Keyboard());
 
-
+        // TODO layer system?
+        g.getGameState().addGameObject(brick);
         g.getGameState().addGameObject(b);
+
+        b.getBody().addCollisionListener((CollisionListener<GameObjectBody>) event -> {
+            if (event.getTarget().getGameObject() instanceof Brick) {
+                g.getGameState().removeGameObject(event.getTarget().getGameObject());
+            }
+        });
 
         Thread t = new Thread(g);
         t.start();

@@ -20,11 +20,9 @@ public class Body {
 
     private static final float DEFAULT_MASS = 1;
 
-    private final List<CollisionListener> collisionListeners;
+    private final List<CollisionListener> collisionListeners = new ArrayList<>();
 
     /* --- Physical qualities --- */
-    // TODO create physical system this body belongs to
-    // TODO create move method which check if the body collides with the world edges or other bodies
     private World world;
     private float mass;
     private Shape shape;
@@ -35,10 +33,6 @@ public class Body {
     private Vector maxVelocity;
     private Vector acceleration;
     */
-
-    {
-        collisionListeners = new ArrayList<>();
-    }
 
     public Body(Shape shape, float mass) {
         this.shape = shape;
@@ -75,10 +69,33 @@ public class Body {
      *
      * @param target The {@code GameObject} which collided with this {@code GameObject}
      */
-    protected void fireCollisionEvent(GameObject target) {
+    protected void fireCollisionEvent(Body target) {
         collisionListeners.forEach((listener) -> {
-            listener.collided(new CollisionEvent(this, target));
+            listener.collided(new CollisionEvent<Body>(this, target));
         });
+    }
+
+    private void detectCollisions() {
+
+        assert getWorld() != null : "Each physical body must belong to a world.";
+
+        getWorld().getBodies().forEach((body) -> {
+
+            if (body == this) {
+                return;
+            }
+
+            if (getShape().intersects(body.getShape())) {
+                fireCollisionEvent(body);
+            }
+
+        });
+
+        // TODO reconsider if the body or the game object should detect the collision
+    }
+
+    protected List<CollisionListener> getCollisionListeners() {
+        return collisionListeners;
     }
 
     public World getWorld() {
@@ -143,13 +160,25 @@ public class Body {
         shape.setY(y);
     }
 
-    public void move(float dx, float dy) {
-        shape.getPosition().add(dx, dy);
+    public float getWidth() {
+        return shape.getWidth();
     }
 
-    public boolean isColliding() {
-        // TODO reconsider if the body or the game object should detect the collision
-        return false;
+    public void setWidth(float width) {
+        shape.setWidth(width);
+    }
+
+    public float getHeight() {
+        return shape.getHeight();
+    }
+
+    public void setHeight(float height) {
+        shape.setHeight(height);
+    }
+
+    public void move(float dx, float dy) {
+        shape.getPosition().add(dx, dy);
+        detectCollisions();
     }
 
     /**

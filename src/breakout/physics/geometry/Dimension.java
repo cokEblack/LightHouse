@@ -16,7 +16,7 @@ public class Dimension {
 
     @Override
     public String toString() {
-        return String.format("(%.3f, %.3f)", getWidth(), getHeight());
+        return String.format("Dimension {width=%.3f, height=%.3f}", getWidth(), getHeight());
     }
 
     public boolean equals(Dimension dimension) {

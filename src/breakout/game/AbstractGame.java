@@ -93,7 +93,7 @@ public abstract class AbstractGame implements Game, Runnable {
      */
     public synchronized void render(Graphics g) {
 
-        frames++;
+        // frames++;
 
         // TODO enable antialiasing?
 
@@ -110,8 +110,6 @@ public abstract class AbstractGame implements Game, Runnable {
         // g.drawString("FPS: " + frames / ((System.currentTimeMillis() - startedAt) / 1000), 16, 16);
 
         g.dispose();
-
-
 
     }
 

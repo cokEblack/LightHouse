@@ -1,5 +1,7 @@
 package breakout.physics.collision;
 
+import breakout.physics.Body;
+
 import java.util.EventListener;
 
 /**
@@ -8,7 +10,7 @@ import java.util.EventListener;
  *
  * @author Melf Kammholz
  */
-public interface CollisionListener extends EventListener {
+public interface CollisionListener <T extends Body> extends EventListener {
 
     /**
      * The {@code collided} method is invoked, when a collision between
@@ -16,6 +18,6 @@ public interface CollisionListener extends EventListener {
      *
      * @param event A collision event
      */
-    void collided(CollisionEvent event);
+    void collided(CollisionEvent<T> event);
 
 }

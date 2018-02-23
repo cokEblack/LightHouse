@@ -1,6 +1,7 @@
 package breakout.game.api;
 
 import breakout.game.Drawable;
+import breakout.game.GameObjectBody;
 import breakout.game.Health;
 import breakout.game.state.GameState;
 import breakout.game.texture.Texture;
@@ -15,8 +16,8 @@ import breakout.physics.geometry.Shape;
  */
 public interface GameObject extends Drawable {
 
-    Body getBody();
-    void setBody(Body body);
+    GameObjectBody getBody();
+    void setBody(GameObjectBody body);
     String getName();
     void setName(String name);
     Texture getTexture();

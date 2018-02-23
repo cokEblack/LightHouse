@@ -1,5 +1,7 @@
 package breakout.physics.collision;
 
+import breakout.physics.Body;
+
 import java.util.EventObject;
 
 /**
@@ -9,15 +11,15 @@ import java.util.EventObject;
  * TODO Add a field which holds the information about where the two GameObject have collided
  *
  * @author Melf Kammholz
+ *
+ * @param <T> The type of the two bodies which collide
  */
-public class CollisionEvent extends EventObject {
+public class CollisionEvent<T extends Body> extends EventObject {
 
-    private final Object target;
+    private final T target;
 
     /**
      * Constructs a {@code CollisionEvent} with a source and a target.
-     *
-     * TODO Replace the type Object with GameObject when it is implemented.
      *
      * @param source The source of the collision is always the object
      *               which dispatches the event.
@@ -25,7 +27,7 @@ public class CollisionEvent extends EventObject {
      *               the source object collided with.
      * @throws IllegalArgumentException If the {@code source} or {@code target} is {@code null}.
      */
-    public CollisionEvent(Object source, Object target) {
+    public CollisionEvent(T source, T target) {
 
         super(source);
 
@@ -42,8 +44,23 @@ public class CollisionEvent extends EventObject {
      *
      * @return The target of the collision
      */
-    public Object getTarget() {
+    public T getTarget() {
         return target;
+    }
+
+    /**
+     * Gets the source of the collision.
+     *
+     * Since the {@code EventObject#getSource()} method returns an
+     * {@code Object} and this class explicitly demands a source
+     * of type {@code T}, the typecast to {@code T} is safe.
+     *
+     * @return The source of the collision.
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public T getSource() {
+        return (T) super.getSource();
     }
 
 }

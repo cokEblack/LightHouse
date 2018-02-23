@@ -14,10 +14,24 @@ public class Rectangle implements Shape {
         this(new Point(x, y), new Dimension(width, height));
     }
 
+    public Rectangle(Rectangle rectangle) {
+        this(
+                rectangle.getX(),
+                rectangle.getY(),
+                rectangle.getWidth(),
+                rectangle.getHeight()
+        );
+    }
+
+    /**
+     * Returns a {@code String} representation of this {@code Rectangle}.
+     *
+     * @return A {@code String} representation of this {@code Rectangle}.
+     */
     @Override
     public String toString() {
         return String.format(
-                "{x=%.3f, y=%.3f, width=%.3f, height=%.3f}",
+                "Rectangle {x=%.3f, y=%.3f, width=%.3f, height=%.3f}",
                 getX(),
                 getY(),
                 getWidth(),
@@ -112,4 +126,10 @@ public class Rectangle implements Shape {
         return false;
 
     }
+
+    public boolean contains(Shape shape) {
+        return getX() <= shape.getX() && shape.getX() + shape.getWidth() <= getX() + getWidth()
+                && getY() <= shape.getY() && shape.getY() + shape.getWidth() <= getY() + getHeight();
+    }
+
 }

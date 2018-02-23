@@ -10,6 +10,7 @@ import java.util.List;
  */
 public interface Level {
 
-    public List getBricks();
+    List<BrickFactory<? extends Brick>> getBricks();
+    Ball getBall();
 
 }

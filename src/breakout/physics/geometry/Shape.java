@@ -2,6 +2,7 @@ package breakout.physics.geometry;
 
 public interface Shape {
 
+    // Position
     float getX();
     void setX(float x);
     float getY();
@@ -9,6 +10,8 @@ public interface Shape {
     Vector getPosition();
     void setPosition(float x, float y);
     void setPosition(Point point);
+
+    // Dimension
     float getWidth();
     void setWidth(float width);
     float getHeight();
@@ -16,6 +19,9 @@ public interface Shape {
     Dimension getDimension();
     void setDimension(float width, float height);
     void setDimension(Dimension dimension);
+
+    // Intersection
     boolean intersects(Shape shape);
+    boolean contains(Shape shape);
 
 }

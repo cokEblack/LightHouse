@@ -1,5 +1,6 @@
 package breakout.game.api;
 
+import breakout.game.GameObjectBody;
 import breakout.game.Health;
 import breakout.game.texture.Texture;
 import breakout.physics.Body;
@@ -10,17 +11,17 @@ import java.awt.Graphics;
 public abstract class AbstractGameObject implements GameObject {
 
     private String name;
-    private Body body;
+    private GameObjectBody body;
     private Health health;
     private Texture texture;
 
     @Override
-    public Body getBody() {
+    public GameObjectBody getBody() {
         return body;
     }
 
     @Override
-    public void setBody(Body body) {
+    public void setBody(GameObjectBody body) {
         this.body = body;
     }
 
@@ -55,7 +56,14 @@ public abstract class AbstractGameObject implements GameObject {
 
     @Override
     public void draw(Graphics g) {
-        g.drawImage(getTexture().getImage(), (int) getBody().getX(), (int) getBody().getY(), 100, 100, null);
+        g.drawImage(
+                getTexture().getImage(),
+                (int) getBody().getX(),
+                (int) getBody().getY(),
+                (int) getBody().getWidth(),
+                (int) getBody().getHeight(),
+                null
+        );
     }
 
 }
