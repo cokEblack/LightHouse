@@ -1,7 +1,5 @@
 package breakout.game.api;
 
-import java.util.List;
-
 /**
  * A level is practically a plugin for the game. It provides all the
  * necessary information a start the level.
@@ -10,7 +8,25 @@ import java.util.List;
  */
 public interface Level {
 
-    List<BrickFactory<? extends Brick>> getBricks();
-    Ball getBall();
+    /**
+     * Creates a ball factory from which the game can create balls.
+     *
+     * @return A ball factory
+     */
+    GameObjectFactory<Ball> createBallFactory();
+
+    /**
+     * Creates a brick factory from which the game can create balls.
+     *
+     * @return A brick factory
+     */
+    GameObjectFactory<Brick> createBrickFactory();
+
+    /**
+     * Creates a paddle factory from which the game can create balls.
+     *
+     * @return A paddle factory
+     */
+    GameObjectFactory<Paddle> createPaddleFactory();
 
 }

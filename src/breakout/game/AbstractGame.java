@@ -1,13 +1,22 @@
 package breakout.game;
 
+import breakout.game.api.GameObject;
 import breakout.game.gui.Window;
 import breakout.game.state.GameState;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
 
 public abstract class AbstractGame implements Game, Runnable {
+
+    {
+
+    }
 
     private final Window window;
     private final GameState gameState;
@@ -18,6 +27,10 @@ public abstract class AbstractGame implements Game, Runnable {
     {
         window = new Window(this);
         isRunning = false;
+
+        // Setup handler for logger
+        getLogger().addHandler(new StreamHandler(System.out, new SimpleFormatter()));
+
     }
 
     public AbstractGame(GameState state) {
@@ -54,6 +67,8 @@ public abstract class AbstractGame implements Game, Runnable {
         isRunning = true;
         startedAt = System.currentTimeMillis();
 
+        create();
+
         final int OPTIMAL_TIME = 1000 / 60;
 
         long previousTime, currentTime;
@@ -85,7 +100,23 @@ public abstract class AbstractGame implements Game, Runnable {
      * @param state The current game state
      */
     public synchronized void update(int dt, GameState state) {
-        state.getGameObjects().forEach(gameObject -> gameObject.update(dt, state));
+
+        // Iterator to avoid ConcurrentModificationException
+        // https://stackoverflow.com/questions/18448671/how-to-avoid-concurrentmodificationexception-while-removing-elements-from-arr
+        Iterator<GameObject> iterator = state.getGameObjects().iterator();
+        while (iterator.hasNext()) {
+            GameObject gameObject = iterator.next();
+            gameObject.update(dt, state);
+        }
+
+        // throws ConcurrentModificationException when GameObjects are
+        // added or deleted from the list
+        /*
+        state.getGameObjects().forEach(gameObject -> {
+            gameObject.update(dt, state);
+        });
+        */
+
     }
 
     /**
@@ -113,4 +144,8 @@ public abstract class AbstractGame implements Game, Runnable {
 
     }
 
+    @Override
+    public Logger getLogger() {
+        return Logger.getLogger(getClass().getName());
+    }
 }

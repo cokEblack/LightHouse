@@ -1,8 +1,8 @@
 package breakout.game.animation;
 
 import breakout.game.texture.Sprite;
-import breakout.physics.geometry.Rectangle;
 import breakout.util.Builder;
+import newton.geometry.Rectangle;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

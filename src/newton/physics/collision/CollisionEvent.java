@@ -1,6 +1,6 @@
-package breakout.physics.collision;
+package newton.physics.collision;
 
-import breakout.physics.Body;
+import newton.physics.Body;
 
 import java.util.EventObject;
 

@@ -12,7 +12,13 @@ import java.util.List;
  */
 public class GameState extends State {
 
-    // TODO or <? extends GameObject>?
+    /**
+     * A list of all {@code GameObject}s that are part of the game.
+     *
+     * These objects are stored inside a list, because all objects
+     * should be drawn in the same order as they are added.
+     *
+     */
     private List<GameObject> gameObjects;
     private Keyboard keyboard;
     private Game game;

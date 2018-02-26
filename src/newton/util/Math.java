@@ -1,4 +1,4 @@
-package breakout.util;
+package newton.util;
 
 public class Math {
 
@@ -15,7 +15,7 @@ public class Math {
      * @return The clamped value
      */
     public static float clamp(float min, float max, float value) {
-        return Float.max(min, Float.max(value, max));
+        return Float.max(min, Float.min(value, max));
     }
 
 }

@@ -3,17 +3,54 @@ package breakout.game.api;
 import breakout.game.GameObjectBody;
 import breakout.game.Health;
 import breakout.game.texture.Texture;
-import breakout.physics.Body;
-import breakout.physics.geometry.Shape;
 
 import java.awt.Graphics;
+import java.util.logging.Logger;
+import java.util.logging.StreamHandler;
 
+/**
+ * The extending class should implement a default constructor which
+ * does not take any arguments.
+ *
+ * @author Melf Kammholz
+ *
+ */
 public abstract class AbstractGameObject implements GameObject {
 
+    /** The name of this GameObject */
     private String name;
+
+    /**
+     * The body of this GameObject.
+     *
+     * The body holds relevant data about physical state
+     * of this GameObject which used to calculate any sort
+     * of impact.
+     *
+     */
     private GameObjectBody body;
+
+    /**
+     * The health of this GameObject and gives information
+     * about the vitality of this GameObject.
+     *
+     */
     private Health health;
+
+    /**
+     * The texture of this GameObject.
+     *
+     * The texture that is used to display this GameObject
+     * inside the window.
+     */
     private Texture texture;
+
+    /**
+     * Force any extending class to add an default constructor
+     * without any formal parameters.
+     *
+     */
+    public AbstractGameObject() {}
 
     @Override
     public GameObjectBody getBody() {
@@ -50,6 +87,7 @@ public abstract class AbstractGameObject implements GameObject {
         return texture;
     }
 
+    @Override
     public void setTexture(Texture texture) {
         this.texture = texture;
     }
@@ -58,10 +96,10 @@ public abstract class AbstractGameObject implements GameObject {
     public void draw(Graphics g) {
         g.drawImage(
                 getTexture().getImage(),
-                (int) getBody().getX(),
-                (int) getBody().getY(),
-                (int) getBody().getWidth(),
-                (int) getBody().getHeight(),
+                (int) getBody().getPosition().getX(),
+                (int) getBody().getPosition().getY(),
+                (int) getBody().getShape().getBounds().getWidth(),
+                (int) getBody().getShape().getBounds().getHeight(),
                 null
         );
     }

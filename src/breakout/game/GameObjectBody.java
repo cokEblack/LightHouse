@@ -1,14 +1,17 @@
 package breakout.game;
 
 import breakout.game.api.GameObject;
-import breakout.physics.Body;
-import breakout.physics.collision.CollisionEvent;
-import breakout.physics.geometry.Shape;
+import newton.geometry.Shape;
+import newton.physics.Body;
+import newton.physics.collision.CollisionEvent;
 
 /**
  * The {@code GameObjectBody} mainly exists to provide a reference to
- * the {@code GameObject} which is represented by the {@code Body}
- * which will collide with other bodies.
+ * the {@code GameObject} which is represented by the {@code Body}.
+ *
+ * When two bodies collide, a {@code CollisionEvent} is dispatched and
+ * a {@code Body} does not hold a reference of the related
+ * {@code GameObject}.
  *
  * @author Melf Kammholz
  */

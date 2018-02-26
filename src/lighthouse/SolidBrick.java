@@ -1,22 +1,23 @@
 package lighthouse;
 
 import breakout.game.GameObjectBody;
+import breakout.game.Health;
 import breakout.game.api.AbstractGameObject;
 import breakout.game.api.Brick;
 import breakout.game.state.GameState;
 import breakout.game.texture.Texture;
-import breakout.physics.Body;
-import breakout.physics.geometry.Rectangle;
+import newton.physics.Body;
+import newton.geometry.Rectangle;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class SolidBrick extends AbstractGameObject implements Brick{
+public class SolidBrick extends AbstractGameObject implements Brick {
 
     {
 
         setName(SolidBrick.class.getName());
-        setBody(new GameObjectBody(this, new Body(new Rectangle(16, 16, 64, 16),0)));
+        setHealth(new Health(100,100, 0));
 
         setTexture(new Texture() {
 
@@ -28,14 +29,22 @@ public class SolidBrick extends AbstractGameObject implements Brick{
                 if (image == null) {
 
                     image = new BufferedImage(
-                            (int) getBody().getShape().getWidth(),
-                            (int) getBody().getShape().getHeight(),
+                            (int) getBody().getShape().getBounds().getWidth(),
+                            (int) getBody().getShape().getBounds().getHeight(),
                             BufferedImage.TYPE_4BYTE_ABGR
                     );
 
-                    Graphics g = image.getGraphics();
+                    Graphics2D g = (Graphics2D) image.getGraphics();
+
                     g.setColor(new Color(0x46b29d));
                     g.fillRect(0, 0, image.getWidth(), image.getHeight());
+
+                    Stroke oldStroke = g.getStroke();
+                    g.setColor(Color.BLACK);
+                    g.setStroke(new BasicStroke(1));
+                    g.drawRect(0, 0, image.getWidth(), image.getHeight());
+                    g.setStroke(oldStroke);
+
 
                     g.dispose();
 
@@ -50,9 +59,17 @@ public class SolidBrick extends AbstractGameObject implements Brick{
                 return null;
             }
         });
+
+
+
+    }
+
+    public SolidBrick(float x, float y) {
+        setBody(new GameObjectBody(this, new Body(new Rectangle(x, y, 64, 16),0)));
     }
 
     @Override
-    public void update(int dt, GameState state) {}
+    public synchronized void update(int dt, GameState state) {
+    }
 
 }

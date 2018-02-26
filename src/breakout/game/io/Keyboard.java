@@ -13,6 +13,11 @@ public class Keyboard extends KeyAdapter {
     }
 
     @Override
+    public String toString() {
+        return keys.toString();
+    }
+
+    @Override
     public void keyPressed(KeyEvent event) {
         keys.put(event.getKeyCode(), true);
     }

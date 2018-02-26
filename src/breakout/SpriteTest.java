@@ -2,8 +2,8 @@ package breakout;
 
 import breakout.game.texture.SpriteMap;
 import breakout.game.texture.SpriteMapping;
-import breakout.physics.geometry.Rectangle;
 import lighthouse.GreatestLevel;
+import newton.geometry.Rectangle;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

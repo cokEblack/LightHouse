@@ -1,7 +1,7 @@
 package breakout.game.texture;
 
 // TODO it is weird to depend on a class of the physics engine
-import breakout.physics.geometry.Rectangle;
+import newton.geometry.Rectangle;
 
 import java.util.Map;
 

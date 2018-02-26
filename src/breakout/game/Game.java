@@ -3,6 +3,7 @@ package breakout.game;
 import breakout.game.state.GameState;
 
 import java.awt.Graphics;
+import java.util.logging.Logger;
 
 public interface Game {
 
@@ -13,8 +14,12 @@ public interface Game {
      */
     GameState getGameState();
 
+    void create();
+
     void update(int dt, GameState state);
 
     void render(Graphics g);
+
+    Logger getLogger();
 
 }
