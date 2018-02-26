@@ -1,6 +1,7 @@
 package lighthouse;
 
 import breakout.game.GameObjectBody;
+import breakout.game.GameObjectBuilder;
 import breakout.game.api.AbstractGameObject;
 import breakout.game.api.Paddle;
 import breakout.game.io.Keyboard;
@@ -47,6 +48,14 @@ public class GloriousPaddle extends AbstractGameObject implements Paddle {
 
         });
 
+    }
+
+    public GloriousPaddle() {
+        super();
+    }
+
+    public GloriousPaddle(GameObjectBuilder builder) {
+        super(builder);
     }
 
     @Override

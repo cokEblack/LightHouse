@@ -1,10 +1,12 @@
 package breakout.game.api;
 
 import breakout.game.GameObjectBody;
+import breakout.game.GameObjectBuilder;
 import breakout.game.Health;
 import breakout.game.texture.Texture;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
 import java.util.logging.StreamHandler;
 
@@ -51,6 +53,14 @@ public abstract class AbstractGameObject implements GameObject {
      *
      */
     public AbstractGameObject() {}
+
+    public AbstractGameObject(GameObjectBuilder builder) {
+        setHealth(builder.getHealth());
+        setBody(new GameObjectBody(this, builder.getBody()));
+        getBody().setMaximumVelocity(builder.getMaximumVelocity());
+        getBody().setVelocity(builder.getCurrentVelocity());
+        setTexture(builder.getTexture());
+    }
 
     @Override
     public GameObjectBody getBody() {

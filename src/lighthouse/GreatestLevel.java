@@ -1,9 +1,10 @@
 package lighthouse;
 
+import breakout.game.GameObjectBuilder;
 import breakout.game.api.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class GreatestLevel implements Level {
 
@@ -27,9 +28,29 @@ public class GreatestLevel implements Level {
 
     private class PaddleFactory implements GameObjectFactory<Paddle> {
 
+        private GameObjectBuilder<Paddle> builder;
+
+        {
+            builder = (new GameObjectBuilder<Paddle>(LessGloriousPaddle.class))
+                    .useRectangularBody(0, 0, 100, 20, 1)
+                    .setMaximumVelocity(0.2f, 0.2f)
+                    .withFullHealth(10)
+                    .withTextureSupplier(() -> {
+
+                        BufferedImage image = new BufferedImage(100, 20, BufferedImage.TYPE_4BYTE_ABGR);
+                        Graphics2D g = (Graphics2D) image.getGraphics();
+                        g.setColor(Color.CYAN);
+                        g.fillRect(0,0, image.getWidth(), image.getHeight());
+                        g.dispose();
+
+                        return image;
+
+                    });
+        }
+
         @Override
         public Paddle create() {
-            return new GloriousPaddle();
+            return (Paddle) builder.build();
         }
 
     }

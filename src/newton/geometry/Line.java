@@ -3,65 +3,26 @@ package newton.geometry;
 import static java.lang.Math.sqrt;
 
 /**
- * This class represents a line segment.
- *
- * A line starts at the position vector and ends at the sum of
- * the position and direction vector.
- *
- * @author Melf Kammholz
- *
+ * A line represents
  */
 public class Line implements Shape {
 
-    /** The point from which the line starts. */
     private Vector position;
-
-    /**
-     * The direction of the line. The direction added to the position
-     * results in the point where this line ends.
-     */
     private Vector direction;
 
-    /**
-     * Creates a line which starts and ends in the origin.
-     *
-     */
     public Line() {
         this(0, 0, 0, 0);
     }
 
-    /**
-     * Creates a line which starts at (x, y) and ends at (x + dx, y + dy).
-     *
-     * @param x The x-coordinate from which the line starts
-     * @param y The y-coordinate from which the line starts
-     * @param dx The x-displacement relative to the line starting x-coordinate
-     * @param dy The y-displacement relative to the line starting y-coordinate
-     */
     public Line(float x, float y, float dx, float dy) {
         this(new Point(x, y), new Point(dx, dy));
     }
 
-    /**
-     * Creates a line which starts at {@code position} and ends at the
-     * {@code direction} added to {@code position} .
-     *
-     * @param position The starting point
-     * @param direction The displacement of ending point
-     */
     public Line(Point position, Point direction) {
         setPosition(position);
         setDirection(direction);
     }
 
-    /**
-     * Returns a string representation of this line.
-     *
-     * The vectors are represented as described.
-     * @see Vector#toString()
-     *
-     * @return A string representation of this line
-     */
     @Override
     public String toString() {
         return String.format(
@@ -72,15 +33,6 @@ public class Line implements Shape {
         );
     }
 
-    /**
-     * Creates a line with a starting point and an ending point.
-     *
-     * @param p1 A starting point
-     * @param p2 An ending point
-     *
-     * @return A line from {@code p1} to {@code p2}.
-     * 
-     */
     public static Line createFromTwoPoints(Point p1, Point p2) {
         float dx = p2.getX() - p1.getX();
         float dy = p2.getY() - p1.getY();
