@@ -28,6 +28,6 @@ public interface Texture {
      *
      * @return An image to fallback to if necessary
      */
-    BufferedImage getFallbackImage();
+    // BufferedImage getFallbackImage();
 
 }

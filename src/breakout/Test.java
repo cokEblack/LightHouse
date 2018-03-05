@@ -2,10 +2,13 @@ package breakout;
 
 
 import breakout.game.AbstractGame;
-import breakout.game.GameObjectBody;
+import breakout.game.GameListener;
+import breakout.game.GameLoopEvent;
+import breakout.game.gameobject.GameObjectBody;
 import breakout.game.api.*;
 import breakout.game.io.Keyboard;
 import breakout.game.state.GameState;
+import lighthouse.LighthouseRendererThread;
 import newton.geometry.Circle;
 import newton.geometry.Vector;
 import newton.physics.Body;
@@ -27,7 +30,7 @@ public class Test {
         try {
             // TODO This class should either be given by the arguments provided to this program or a graphical interface.
             // ... if this is fully implemented, this program is solely a player for levels.
-            levelClass = (Class<? extends Level>) Class.forName("lighthouse.GreatestLevel");
+            levelClass = (Class<? extends Level>) Class.forName("area52.GreatestLevel");
         } catch (ClassNotFoundException exception) {
             System.err.println("The level cannot be found.");
         }
@@ -40,20 +43,20 @@ public class Test {
         }
 
 
-        World w = new World(0, 0, 640, 480);
-        w.setGravity(0, 0.0000075f);
+        World world = new World(0, 0, 640, 480);
+        world.setGravity(0, 0.0000075f);
 
         Paddle paddle = level.createPaddleFactory().create();
         paddle.getBody().setY(480 - paddle.getBody().getShape().getBounds().getHeight() - 32);
-        w.addBody(paddle.getBody());
+        world.addBody(paddle.getBody());
 
         Ball ball = level.createBallFactory().create();
         ball.getBody().setPosition(100, 100);
-        w.addBody(ball.getBody());
+        world.addBody(ball.getBody());
 
         GameObjectFactory<Brick> brickFactory = level.createBrickFactory();
 
-        AbstractGame g = new AbstractGame() {
+        AbstractGame game = new AbstractGame() {
 
             @Override
             public void create() {
@@ -65,7 +68,7 @@ public class Test {
                 for (int i = 0, n = 4; i < n; i++) {
                     Brick brick = brickFactory.create();
                     brick.getBody().setPosition(16 + brick.getBody().getWidth() * i, 16);
-                    w.addBody(brick.getBody());
+                    world.addBody(brick.getBody());
                     getGameState().addGameObject(brick);
                 }
 
@@ -78,7 +81,21 @@ public class Test {
             public synchronized void update(int dt, GameState state) {
                 super.update(dt, state);
             }
+
         };
+
+
+        // TODO use the POST_CREATE event of the game to determine which color is displayed on the lighthouse
+        LighthouseRendererThread lighthouse = new LighthouseRendererThread();
+        game.addGameListener(new GameListener() {
+
+            @Override
+            public void onPostRender(GameLoopEvent event) {
+                // TODO Enqueue a copy of the game state
+                lighthouse.enqueueGameState(event.getGameState());
+            }
+
+        });
 
 
 
@@ -97,7 +114,7 @@ public class Test {
                 ball.getBody().setVelocity(ball.getBody().getVelocity().scale(-1));
 
                 // The brick is removed from the game, if it was hit by the ball.
-                g.getGameState().removeGameObject(brick);
+                game.getGameState().removeGameObject(brick);
 
             }
 
@@ -131,12 +148,12 @@ public class Test {
             }
         });
 
-        ball.getBody().addCollisionListener(new WorldBorderCollisionAdapter(w) {
+        ball.getBody().addCollisionListener(new WorldBorderCollisionAdapter(world) {
 
             @Override
-            public void collidedWithTopBorder(CollisionEvent event) {
+            public void onCollisionWithTopBorder(CollisionEvent event) {
 
-                g.getLogger().info(() -> String.format("%s hit world's top border.", ball.getClass().getName()));
+                game.getLogger().info(() -> String.format("%s hit world's top border.", ball.getClass().getName()));
 
                 Vector velocity = ball.getBody().getVelocity();
                 ball.getBody().setVelocityY(-1 * velocity.getY());
@@ -144,9 +161,9 @@ public class Test {
             }
 
             @Override
-            public void collidedWithRightBorder(CollisionEvent event) {
+            public void onCollisionWithRightBorder(CollisionEvent event) {
 
-                g.getLogger().info(() -> String.format("%s hit world's right border.", ball.getClass().getName()));
+                game.getLogger().info(() -> String.format("%s hit world's right border.", ball.getClass().getName()));
 
                 Vector velocity = ball.getBody().getVelocity();
                 ball.getBody().setVelocityX(-1 * velocity.getX());
@@ -154,9 +171,9 @@ public class Test {
             }
 
             @Override
-            public void collidedWithBottomBorder(CollisionEvent event) {
+            public void onCollisionWithBottomBorder(CollisionEvent event) {
 
-                g.getLogger().info(() -> String.format("%s hit world's bottom border.", ball.getClass().getName()));
+                game.getLogger().info(() -> String.format("%s hit world's bottom border.", ball.getClass().getName()));
 
                 Vector velocity = ball.getBody().getVelocity();
                 ball.getBody().setVelocityY(-1 * velocity.getY());
@@ -164,9 +181,9 @@ public class Test {
             }
 
             @Override
-            public void collidedWithLeftBorder(CollisionEvent event) {
+            public void onCollisionWithLeftBorder(CollisionEvent event) {
 
-                g.getLogger().info(() -> String.format("%s hit world's left border.", ball.getClass().getName()));
+                game.getLogger().info(() -> String.format("%s hit world's left border.", ball.getClass().getName()));
 
                 Vector velocity = ball.getBody().getVelocity();
                 ball.getBody().setVelocityX(-1 * velocity.getX());
@@ -175,7 +192,10 @@ public class Test {
 
         });
 
-        Thread t = new Thread(g);
+
+        lighthouse.start();
+
+        Thread t = new Thread(game);
         t.start();
 
 

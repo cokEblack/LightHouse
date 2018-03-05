@@ -1,8 +1,8 @@
 package breakout.game.api;
 
 import breakout.game.Drawable;
-import breakout.game.GameObjectBody;
-import breakout.game.Health;
+import breakout.game.gameobject.GameObjectBody;
+import breakout.game.gameobject.Health;
 import breakout.game.state.GameState;
 import breakout.game.texture.Texture;
 

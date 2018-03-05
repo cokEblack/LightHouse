@@ -37,7 +37,7 @@ public abstract class WorldBorderCollisionAdapter implements CollisionListener<B
      * @param event A collision event
      */
     @Override
-    public final void collided(CollisionEvent event) {
+    public final void onCollision(CollisionEvent event) {
 
         // Ignore any event that does not have a border as its target.
         if (!(event.getTarget() instanceof Border)) {
@@ -48,13 +48,13 @@ public abstract class WorldBorderCollisionAdapter implements CollisionListener<B
 
         // Distribute the event to the right handler.
         if (border == world.getTopBorder()) {
-            collidedWithTopBorder(event);
+            onCollisionWithTopBorder(event);
         } else if (border == world.getRightBorder()) {
-            collidedWithRightBorder(event);
+            onCollisionWithRightBorder(event);
         } else if (border == world.getBottomBorder()) {
-            collidedWithBottomBorder(event);
+            onCollisionWithBottomBorder(event);
         } else if (border == world.getLeftBorder()) {
-            collidedWithLeftBorder(event);
+            onCollisionWithLeftBorder(event);
         }
 
         // At this point the border that has been provided is not part of
@@ -69,7 +69,7 @@ public abstract class WorldBorderCollisionAdapter implements CollisionListener<B
      * @param event A collision event of which the target is the top border
      *              of the world.
      */
-    public abstract void collidedWithTopBorder(CollisionEvent event);
+    public abstract void onCollisionWithTopBorder(CollisionEvent event);
 
     /**
      * This method is invoked, when a body hits the right border of the
@@ -78,7 +78,7 @@ public abstract class WorldBorderCollisionAdapter implements CollisionListener<B
      * @param event A collision event of which the target is the right border
      *              of the world.
      */
-    public abstract void collidedWithRightBorder(CollisionEvent event);
+    public abstract void onCollisionWithRightBorder(CollisionEvent event);
 
     /**
      * This method is invoked, when a body hits the bottom border of the
@@ -87,7 +87,7 @@ public abstract class WorldBorderCollisionAdapter implements CollisionListener<B
      * @param event A collision event of which the target is the bottom border
      *              of the world.
      */
-    public abstract void collidedWithBottomBorder(CollisionEvent event);
+    public abstract void onCollisionWithBottomBorder(CollisionEvent event);
 
     /**
      * This method is invoked, when a body hits the left border of the
@@ -96,6 +96,6 @@ public abstract class WorldBorderCollisionAdapter implements CollisionListener<B
      * @param event A collision event of which the target is the left border
      *              of the world.
      */
-    public abstract void collidedWithLeftBorder(CollisionEvent event);
+    public abstract void onCollisionWithLeftBorder(CollisionEvent event);
 
 }

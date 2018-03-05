@@ -23,8 +23,4 @@ public class AnimatedTexture implements Texture {
 
     }
 
-    @Override
-    public BufferedImage getFallbackImage() {
-        return null;
-    }
 }

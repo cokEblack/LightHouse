@@ -5,21 +5,22 @@ import breakout.game.gui.Window;
 import breakout.game.state.GameState;
 
 import java.awt.*;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 
+// TODO Game extends Runnable?
 public abstract class AbstractGame implements Game, Runnable {
-
-    {
-
-    }
 
     private final Window window;
     private final GameState gameState;
+    private final List<GameListener> gameListeners = new LinkedList<>();
     private boolean isRunning;
     private long frames = 0;
     private long startedAt = 0;
@@ -51,6 +52,27 @@ public abstract class AbstractGame implements Game, Runnable {
         return window;
     }
 
+    @Override
+    public void addGameListener(GameListener listener) {
+        gameListeners.add(listener);
+    }
+
+    @Override
+    public void removeGameListener(GameListener listener) {
+        gameListeners.remove(listener);
+    }
+
+    protected List<GameListener> getGameListeners() {
+        return gameListeners;
+    }
+
+    protected void fireGameEvent(GameLoopStage stage) {
+
+        getGameListeners().forEach(gameListener -> {
+            gameListener.getGameListenerMethod(stage).accept(new GameLoopEvent(stage, this));
+        });
+    }
+
     /**
      * Stops the game loop.
      */
@@ -68,6 +90,8 @@ public abstract class AbstractGame implements Game, Runnable {
         startedAt = System.currentTimeMillis();
 
         create();
+        fireGameEvent(GameLoopStage.CREATE);
+        fireGameEvent(GameLoopStage.POST_CREATE);
 
         final int OPTIMAL_TIME = 1000 / 60;
 
@@ -79,8 +103,12 @@ public abstract class AbstractGame implements Game, Runnable {
             previousTime = currentTime;
             currentTime = System.currentTimeMillis();
 
+            fireGameEvent(GameLoopStage.PRE_UPDATE);
             update((int) (currentTime - previousTime), getGameState());
+            fireGameEvent(GameLoopStage.POST_UPDATE);
+            fireGameEvent(GameLoopStage.PRE_RENDER);
             window.repaint();
+            fireGameEvent(GameLoopStage.POST_RENDER);
 
             try {
                 Thread.sleep(Math.max(0, currentTime + OPTIMAL_TIME - System.currentTimeMillis()));

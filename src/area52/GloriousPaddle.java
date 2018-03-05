@@ -1,8 +1,8 @@
-package lighthouse;
+package area52;
 
-import breakout.game.GameObjectBody;
-import breakout.game.GameObjectBuilder;
-import breakout.game.api.AbstractGameObject;
+import breakout.game.gameobject.GameObjectBody;
+import breakout.game.gameobject.GameObjectBuilder;
+import breakout.game.gameobject.AbstractGameObject;
 import breakout.game.api.Paddle;
 import breakout.game.io.Keyboard;
 import breakout.game.state.GameState;
@@ -41,11 +41,6 @@ public class GloriousPaddle extends AbstractGameObject implements Paddle {
 
             }
 
-            @Override
-            public BufferedImage getFallbackImage() {
-                return null;
-            }
-
         });
 
     }
@@ -64,11 +59,11 @@ public class GloriousPaddle extends AbstractGameObject implements Paddle {
         Keyboard keyboard = state.getKeyboard();
 
         if (keyboard.isKeyPressed(KeyEvent.VK_A)) {
-            getBody().setVelocity(getBody().getVelocity().setX(-1 * 4f / dt));
+            getBody().setVelocityX(-1 * 4f / dt);
         } else if (keyboard.isKeyPressed(KeyEvent.VK_D)) {
-            getBody().setVelocity(getBody().getVelocity().setX(4f / dt));
+            getBody().setVelocityX(4f / dt);
         } else {
-            getBody().setVelocity(getBody().getVelocity().setX(0));
+            getBody().setVelocityX(0);
         }
 
         getBody().move(dt);

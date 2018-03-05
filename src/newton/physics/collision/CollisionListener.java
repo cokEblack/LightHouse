@@ -18,6 +18,6 @@ public interface CollisionListener <T extends Body> extends EventListener {
      *
      * @param event A collision event
      */
-    void collided(CollisionEvent<T> event);
+    void onCollision(CollisionEvent<T> event);
 
 }

@@ -22,4 +22,7 @@ public interface Game {
 
     Logger getLogger();
 
+    void addGameListener(GameListener listener);
+    void removeGameListener(GameListener listener);
+
 }

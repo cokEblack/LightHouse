@@ -9,6 +9,7 @@ package breakout.game.api;
  *
  * @param <T> The type of the {@code GameObject}
  */
+@FunctionalInterface
 public interface GameObjectFactory<T extends GameObject> {
 
     /**

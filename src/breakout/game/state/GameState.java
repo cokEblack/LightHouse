@@ -5,6 +5,7 @@ import breakout.game.api.GameObject;
 import breakout.game.io.Keyboard;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class GameState extends State {
     private Game game;
 
     {
-        gameObjects = new ArrayList<>();
+        gameObjects = new LinkedList<>();
         keyboard = new Keyboard();
     }
 

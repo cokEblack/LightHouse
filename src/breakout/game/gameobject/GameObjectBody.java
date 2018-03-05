@@ -1,4 +1,4 @@
-package breakout.game;
+package breakout.game.gameobject;
 
 import breakout.game.api.GameObject;
 import newton.geometry.Shape;
@@ -41,7 +41,7 @@ public class GameObjectBody extends Body {
 
     protected void fireCollisionEvent(GameObjectBody target) {
         getCollisionListeners().forEach((listener) -> {
-            listener.collided(new CollisionEvent<GameObjectBody>(this, target));
+            listener.onCollision(new CollisionEvent<GameObjectBody>(this, target));
         });
     }
 

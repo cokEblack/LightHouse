@@ -1,14 +1,12 @@
-package breakout.game.api;
+package breakout.game.gameobject;
 
-import breakout.game.GameObjectBody;
-import breakout.game.GameObjectBuilder;
-import breakout.game.Health;
+import breakout.game.api.GameObject;
+import breakout.game.gameobject.GameObjectBody;
+import breakout.game.gameobject.GameObjectBuilder;
+import breakout.game.gameobject.Health;
 import breakout.game.texture.Texture;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.logging.Logger;
-import java.util.logging.StreamHandler;
 
 /**
  * The extending class should implement a default constructor which
@@ -33,11 +31,10 @@ public abstract class AbstractGameObject implements GameObject {
     private GameObjectBody body;
 
     /**
-     * The health of this GameObject and gives information
-     * about the vitality of this GameObject.
+     * The attributes of this GameObject.
      *
      */
-    private Health health;
+    private GameplayAttributeMap attributes = new GameplayAttributeMap();
 
     /**
      * The texture of this GameObject.
@@ -55,11 +52,18 @@ public abstract class AbstractGameObject implements GameObject {
     public AbstractGameObject() {}
 
     public AbstractGameObject(GameObjectBuilder builder) {
+
+        setName(builder.getName());
         setHealth(builder.getHealth());
-        setBody(new GameObjectBody(this, builder.getBody()));
-        getBody().setMaximumVelocity(builder.getMaximumVelocity());
-        getBody().setVelocity(builder.getCurrentVelocity());
+
+        GameObjectBody body = new GameObjectBody(this, builder.getBody());
+        body.setMaximumVelocity(builder.getMaximumVelocity());
+        body.setVelocity(builder.getCurrentVelocity());
+        body.ignoreGravity(builder.isGravityIgnored());
+        setBody(body);
+
         setTexture(builder.getTexture());
+
     }
 
     @Override
@@ -84,12 +88,12 @@ public abstract class AbstractGameObject implements GameObject {
 
     @Override
     public Health getHealth() {
-        return health;
+        return (Health) attributes.getAttribute(GameplayAttributeMap.DefaultAttribute.HEALTH);
     }
 
     @Override
     public void setHealth(Health health) {
-        this.health = health;
+        attributes.setAttribute(GameplayAttributeMap.DefaultAttribute.HEALTH, health);
     }
 
     @Override

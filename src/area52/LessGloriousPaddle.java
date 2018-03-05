@@ -1,7 +1,7 @@
-package lighthouse;
+package area52;
 
-import breakout.game.GameObjectBuilder;
-import breakout.game.api.AbstractGameObject;
+import breakout.game.gameobject.GameObjectBuilder;
+import breakout.game.gameobject.AbstractGameObject;
 import breakout.game.api.Paddle;
 import breakout.game.io.Keyboard;
 import breakout.game.state.GameState;

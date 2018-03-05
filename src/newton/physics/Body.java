@@ -157,7 +157,7 @@ public class Body {
      */
     protected void fireCollisionEvent(Body target) {
         getCollisionListeners().forEach((listener) -> {
-            listener.collided(new CollisionEvent<Body>(this, target));
+            listener.onCollision(new CollisionEvent<Body>(this, target));
         });
     }
 

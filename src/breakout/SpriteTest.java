@@ -2,12 +2,11 @@ package breakout;
 
 import breakout.game.texture.SpriteMap;
 import breakout.game.texture.SpriteMapping;
-import lighthouse.GreatestLevel;
+import area52.GreatestLevel;
 import newton.geometry.Rectangle;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 public class SpriteTest {

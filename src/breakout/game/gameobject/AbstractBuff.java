@@ -1,4 +1,6 @@
-package breakout.game.api;
+package breakout.game.gameobject;
+
+import breakout.game.api.Buff;
 
 public abstract class AbstractBuff implements Buff {
 

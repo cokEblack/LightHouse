@@ -1,4 +1,4 @@
-package breakout.game;
+package breakout.game.gameobject;
 
 public class Health extends RegenerativeGameObjectResource {
 
