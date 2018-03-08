@@ -4,10 +4,6 @@ import java.util.function.Consumer;
 
 public interface GameListener {
 
-    /*
-    void create();
-    */
-
     default void onCreate(GameLoopEvent event) {}
     default void onPostCreate(GameLoopEvent event) {}
     default void onPreUpdate(GameLoopEvent event) {}
@@ -16,6 +12,7 @@ public interface GameListener {
     default void onPreRender(GameLoopEvent event) {}
     default void onRender(GameLoopEvent event) {}
     default void onPostRender(GameLoopEvent event) {}
+    default void onClose(GameLoopEvent event) {}
 
 
     default Consumer<GameLoopEvent> getGameListenerMethod(GameLoopStage stage) {
@@ -43,6 +40,10 @@ public interface GameListener {
                 return this::onRender;
             case POST_RENDER:
                 return this::onPostRender;
+
+            // Close
+            case CLOSE:
+                return this::onClose;
 
             default:
                 throw new IllegalArgumentException("Stage not supported.");

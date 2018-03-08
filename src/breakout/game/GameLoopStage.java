@@ -22,6 +22,8 @@ public enum GameLoopStage {
 
     PRE_RENDER,
     RENDER,
-    POST_RENDER;
+    POST_RENDER,
+
+    CLOSE;
 
 }

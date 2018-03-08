@@ -1,5 +1,7 @@
 package breakout.game.api;
 
+import breakout.game.GameListener;
+
 /**
  * A level is practically a plugin for the game. It provides all the
  * necessary information a start the level.
@@ -28,5 +30,7 @@ public interface Level {
      * @return A paddle factory
      */
     GameObjectFactory<Paddle> createPaddleFactory();
+
+    GameListener getGameListener();
 
 }

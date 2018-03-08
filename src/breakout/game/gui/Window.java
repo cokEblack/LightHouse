@@ -12,19 +12,9 @@ public class Window extends JFrame {
 
     {
 
-        setTitle("Breakout"); // TODO consider setting this while the object is constructed
+        setTitle("Breakout");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-
-        // As most arcade games were played on CRT TVs, the aspect ratio of
-        // this game must be 4:3 to create the retro vibes
-        // TODO Lighthouse aspect ratio 2:1 (28x14)
-
-        // TODO deal with insets
-        pack();
-        Insets insets = getInsets();
-        // setSize(insets.left + insets.right + 640, insets.top + insets.bottom + (640 / 4) * 3);
-        setSize(insets.left + 640, insets.top + (640 / 4) * 3);
 
         setResizable(false);
         setLocationRelativeTo(null);
@@ -35,10 +25,6 @@ public class Window extends JFrame {
 
         this.game = game;
 
-        {
-            setPreferredSize(new Dimension(640, 480));
-        }
-
         this.canvas = new JPanel() {
 
             @Override
@@ -48,6 +34,9 @@ public class Window extends JFrame {
             }
 
         };
+
+        this.canvas.setMinimumSize(new Dimension(32 * 28, 32 * 14));
+        this.canvas.setPreferredSize(new Dimension(32 * 28, 32 * 14));
 
         add(canvas, BorderLayout.CENTER);
 

@@ -2,6 +2,7 @@ package breakout.game.api;
 
 import breakout.game.Drawable;
 import breakout.game.gameobject.GameObjectBody;
+import breakout.game.gameobject.GameObjectListener;
 import breakout.game.gameobject.Health;
 import breakout.game.state.GameState;
 import breakout.game.texture.Texture;
@@ -26,13 +27,8 @@ import breakout.game.texture.Texture;
  * game objects and adding a little bit of character, which should
  * ultimately benefit the user's experience.
  *
- * TODO provide a mechanism to give any GameObject a generic name
  *
- * TODO summarize any resource like health in a map, which allows better management of a game object's state. This should be become handy, when a game object has more than a few resources (like standard roleplay stats: strength, agility, intelligence, vitality, ...)
- *
- * TODO a health field would directly imply a damage and restoreHealth method
- *
- * TODO consider moving the update method to a diffent controller which acts a controller for this GameObject. The game object would serve solely as a model (a pure data representation).
+ * TODO consider moving the update method to a different controller which acts a controller for this GameObject. The game object would serve solely as a model (a pure data representation).
  *
  * @author Melf Kammholz
  *
@@ -96,6 +92,120 @@ public interface GameObject extends Drawable {
      * @param health The health to set
      */
     void setHealth(Health health);
+
+    /**
+     * Damages this game object by a given value.
+     *
+     * @param damageDone The damage that has been dealt
+     */
+    void damage(float damageDone);
+
+    /**
+     * Restores an amount of health points.
+     *
+     * @param healthPoints An amount of health points
+     *
+     */
+    void restoreHealth(float healthPoints);
+
+    /**
+     * Sets the game object's vulnerability.
+     *
+     * @param isVulnerable Is the game object vulnerable?
+     */
+    void setVulnerability(boolean isVulnerable);
+
+    /**
+     * Returns if the game object is vulnerable or not.
+     *
+     * @return Returns if the game object is vulnerable or not.
+     */
+    boolean isVulnerable();
+
+    /**
+     * Applies a buff.
+     *
+     * @param buff A buff
+     */
+    void applyBuff(Buff buff);
+
+    /**
+     * Removes a buff.
+     *
+     * @param buff A buff
+     */
+    void removeBuff(Buff buff);
+
+    /**
+     * Get data associated with this game object.
+     *
+     * @param key A key which grants access to the deposited data
+     * @return A value associated with this game object
+     */
+    Object getData(GameObjectDataProperty key);
+
+    /**
+     * Sets data which is associated with this game object.
+     *
+     * This method should throw an {@code IllegalArgumentException} if
+     * the key is already in use, to prevent overwrite data which might
+     * be important for other plugins.
+     *
+     * @param key A key which should grant access to the deposited data
+     * @param value A value which should be associated with this game object
+     * @throws IllegalArgumentException If the key is already in use.
+     */
+    void setData(GameObjectDataProperty key, Object value);
+
+    /**
+     * Checks if a game object is destroyed.
+     *
+     * This method is mainly used as workaround for the destruction of game
+     * objects inside collision listeners. As there is not immediate access
+     * to the iterator, removing game objects from the game state results in
+     * a {@code ConcurrentModificationException} which is hereby prevented.
+     *
+     * @return Returns {@code true} if the game object is destroyed, else
+     *     {@code false}
+     */
+    boolean isDestroyed();
+
+    /**
+     * Sets the destruction flag.
+     *
+     * Any game object, which is destroyed, should be safely removed from
+     * the game state.
+     *
+     */
+    void destroy();
+
+    /**
+     * Adds a {@code GameObjectListener} to this game object.
+     *
+     * @param listener A {@code GameObjectListener}
+     */
+    void addGameObjectListener(GameObjectListener listener);
+
+    /**
+     * Removes a {@code GameObjectListener} to this game object.
+     *
+     * @param listener A {@code GameObjectListener}
+     */
+    void removeGameObjectListener(GameObjectListener listener);
+
+    /**
+     * Equips this game object with a weapon.
+     *
+     * @param weapon A weapon
+     */
+    void setWeapon(Weapon weapon);
+
+    /**
+     * Returns the weapon, this game object is equipped with.
+     *
+     * @return The weapon, this game object is equipped with
+     */
+    Weapon getWeapon();
 
     /**
      * Updates the {@code GameObject}.

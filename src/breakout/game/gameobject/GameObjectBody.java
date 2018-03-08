@@ -39,6 +39,33 @@ public class GameObjectBody extends Body {
         return gameObject;
     }
 
+    @Override
+    protected void detectCollisions() {
+
+        // Bodies can only collide if they are in the same frame of reference.
+        if (getWorld() == null) {
+            return;
+        }
+
+        getWorld().getBodies().forEach((target) -> {
+
+            // This body always collides with itself and this collision is redundant.
+            if (target == this) {
+                return;
+            }
+
+            boolean isDestroyed = target instanceof GameObjectBody
+                    && ((GameObjectBody) target).getGameObject().isDestroyed();
+
+            if (!isDestroyed && isCollidingWith(target)) {
+                fireCollisionEvent(target);
+            }
+
+        });
+
+
+    }
+
     protected void fireCollisionEvent(GameObjectBody target) {
         getCollisionListeners().forEach((listener) -> {
             listener.onCollision(new CollisionEvent<GameObjectBody>(this, target));

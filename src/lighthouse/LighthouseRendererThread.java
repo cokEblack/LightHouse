@@ -40,6 +40,10 @@ public class LighthouseRendererThread extends Thread {
         notifyAll();
     }
 
+    public Renderer getRenderer() {
+        return renderer;
+    }
+
     /**
      * Waits for {@code GameState} objects and renders them to
      * display them on the Lighthouse screen.

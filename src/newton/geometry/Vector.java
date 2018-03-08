@@ -111,6 +111,14 @@ public class Vector extends Point {
         return new Vector(getX() * scalar, getY() * scalar);
     }
 
+    public Vector scaleX(final float scalar) {
+        return new Vector(getX() * scalar, getY());
+    }
+
+    public Vector scaleY(final float scalar) {
+        return new Vector(getX(), getY() * scalar);
+    }
+
     /**
      * Inverts this vector (scales the vector with a factor -1).
      *

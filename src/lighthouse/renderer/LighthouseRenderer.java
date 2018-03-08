@@ -1,11 +1,13 @@
 package lighthouse.renderer;
 
+import breakout.game.api.Ball;
 import breakout.game.api.GameObject;
 import breakout.game.renderer.Renderer;
 import breakout.game.state.GameState;
-// import de.cau.infprogoo.lighthouse.LighthouseDisplay;
+import de.cau.infprogoo.lighthouse.LighthouseDisplay;
 import lighthouse.GameObjectTransformer;
 import lighthouse.LighthousePixel;
+import newton.geometry.Rectangle;
 
 import java.io.IOException;
 
@@ -19,12 +21,11 @@ public class LighthouseRenderer implements Renderer {
     private static final int GREEN_INDEX = 1;
     private static final int BLUE_INDEX = 2;
 
-    // private final LighthouseDisplay display;
+    private final LighthouseDisplay display;
 
     {
 
-        /*
-        display = new LighthouseDisplay("", "");
+        display = new LighthouseDisplay("stu209214", "API-TOK_gpzz-EnW4-7KAC-hft0-993n");
 
         try {
             display.connect();
@@ -32,8 +33,10 @@ public class LighthouseRenderer implements Renderer {
             System.out.println("Connection failed: " + exception.getMessage());
             exception.printStackTrace();
         }
-        */
 
+    }
+
+    public LighthouseRenderer() {
     }
 
     @Override
@@ -43,25 +46,47 @@ public class LighthouseRenderer implements Renderer {
 
         byte[] buffer = new byte[WIDTH * HEIGHT * NUMBER_OF_COLOR_CHANNELS];
 
-        for (GameObject gameObject : state.getGameObjects()) {
+        float resX = state.getWorld().getWidth() / WIDTH;
+        float resY = state.getWorld().getHeight() / HEIGHT;
 
-            LighthousePixel pixel = transformer.transform(gameObject);
+        for (int i = 0, n = buffer.length / NUMBER_OF_COLOR_CHANNELS; i < n; i++) {
 
-            int index = pixel.getY() / 100 * WIDTH + pixel.getX() / 100;
-            buffer[index + RED_INDEX] = (byte) pixel.getFillColor().getRed();
-            buffer[index + GREEN_INDEX] = (byte) pixel.getFillColor().getGreen();
-            buffer[index + BLUE_INDEX] = (byte) pixel.getFillColor().getBlue();
+            float x = (i % WIDTH) * resX;
+            float y = (i / WIDTH) * resY;
+
+            Rectangle pixelRect = new Rectangle(x, y, resX, resY);
+
+            for (GameObject gameObject : state.getGameObjects()) {
+
+                if (gameObject.isDestroyed()) {
+                    continue;
+                }
+
+                Rectangle gameObjectBounds = gameObject.getBody().getBounds();
+
+                if (!pixelRect.intersects(gameObjectBounds)) {
+                    continue;
+                }
+
+                LighthousePixel pixel = transformer.transform(gameObject);
+
+                int index = NUMBER_OF_COLOR_CHANNELS * i;
+                buffer[index + RED_INDEX] = (byte) pixel.getFillColor().getRed();
+                buffer[index + GREEN_INDEX] = (byte) pixel.getFillColor().getGreen();
+                buffer[index + BLUE_INDEX] = (byte) pixel.getFillColor().getBlue();
+
+            }
 
         }
 
-        /*
         try {
-            display.send(buffer);
+            if (true) {
+                display.send(buffer);
+            }
         } catch (IOException exception) {
             System.err.println("Connection failed: " + exception.getMessage());
             exception.printStackTrace();
         }
-        */
 
     }
 

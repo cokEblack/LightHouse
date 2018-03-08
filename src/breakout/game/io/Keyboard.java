@@ -1,16 +1,15 @@
 package breakout.game.io;
 
+import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 public class Keyboard extends KeyAdapter {
 
-    private final HashMap<Integer, Boolean> keys;
-
-    {
-        keys = new HashMap<>();
-    }
+    /** A map which stores if a key is pressed or not */
+    private final HashMap<Integer, Boolean> keys = new HashMap<>();
 
     @Override
     public String toString() {

@@ -59,11 +59,11 @@ public class GloriousPaddle extends AbstractGameObject implements Paddle {
         Keyboard keyboard = state.getKeyboard();
 
         if (keyboard.isKeyPressed(KeyEvent.VK_A)) {
-            getBody().setVelocityX(-1 * 4f / dt);
+            getBody().setVelocity(getBody().getVelocity().setX(-1 * 4f / dt));
         } else if (keyboard.isKeyPressed(KeyEvent.VK_D)) {
-            getBody().setVelocityX(4f / dt);
+            getBody().setVelocity(getBody().getVelocity().setX(4f / dt));
         } else {
-            getBody().setVelocityX(0);
+            getBody().setVelocity(getBody().getVelocity().setX(0));
         }
 
         getBody().move(dt);

@@ -1,8 +1,13 @@
 package breakout.game.gameobject;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 import static newton.util.Math.clamp;
 
 public class GameObjectAttribute implements GameplayAttribute {
+
+    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     private float currentValue = 0;
 
@@ -10,13 +15,24 @@ public class GameObjectAttribute implements GameplayAttribute {
      * This value is initialized to -1 to detect the illegal state, that
      * could occur if the current value is set before the max value is.
      *
-     * TODO consider to set the max value Float.MAX_VALUE
      */
-    private float maximumValue = -1;
+    private float maximumValue;
 
-    public GameObjectAttribute(float currentValue, float maxValue) {
-        setMaximumValue(maxValue);
+    public GameObjectAttribute() {
+        this(Float.MAX_VALUE, Float.MAX_VALUE);
+    }
+
+    public GameObjectAttribute(float currentValue, float maximumValue) {
+        setMaximumValue(maximumValue);
         setCurrentValue(currentValue);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changes.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changes.removePropertyChangeListener(listener);
     }
 
     public float getCurrentValue() {
@@ -24,20 +40,9 @@ public class GameObjectAttribute implements GameplayAttribute {
     }
 
     public void setCurrentValue(float currentValue) {
-
-        if (maximumValue < 0) {
-            throw new IllegalStateException("The max value must be set first to make sure current value does not exceed max value.");
-        }
-
-        /*
-        // clamp over exception?
-        if (currentValue < 0) {
-            throw new IllegalArgumentException("The value must not be a negative value.");
-        }
-        */
-
+        float oldValue = this.currentValue;
         this.currentValue = clamp(0, getMaximumValue(), currentValue);
-
+        changes.firePropertyChange("value", oldValue, this.currentValue);
     }
 
     public float getMaximumValue() {

@@ -4,24 +4,52 @@ import newton.geometry.Point;
 import newton.geometry.Rectangle;
 import newton.geometry.Vector;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
+/**
+ * A world is a frame of reference for physical bodies.
+ *
+ * @author Melf Kammholz
+ */
 public class World {
 
+    /** The boundary of this world */
     public Rectangle bounds;
-    public Set<Body> bodies = new HashSet<>();
+
+    /** A list which contains any body that is related to this world */
+    public List<Body> bodies = new LinkedList<>();
+
+    /** The gravity which affects any body in this world */
     public Vector gravity = Vector.createNullVector();
 
+    /** The world's top border */
     private Border topBorder;
+
+    /** The world's right border */
     private Border rightBorder;
+
+    /** The world's bottom border */
     private Border bottomBorder;
+
+    /** The world's left border */
     private Border leftBorder;
 
-    public World(float x, float y, float width, float height) {
-        this(new Rectangle(x, y, width, height));
+    /**
+     * Creates a world with its dimensions.
+     *
+     * @param width The world's width
+     * @param height The world's height
+     */
+    public World(float width, float height) {
+        this(new Rectangle(0, 0, width, height));
     }
 
+    /**
+     * Creates a world.
+     *
+     * @param bounds
+     */
     public World(Rectangle bounds) {
         setBounds(bounds);
         setBordersFromBounds(getBounds());
@@ -53,6 +81,14 @@ public class World {
         this.bounds = bounds;
     }
 
+    public float getWidth() {
+        return getBounds().getWidth();
+    }
+
+    public float getHeight() {
+        return getBounds().getHeight();
+    }
+
     public void addBody(Body body) {
         body.setWorld(this);
         bodies.add(body);
@@ -63,7 +99,7 @@ public class World {
         bodies.remove(body);
     }
 
-    public Set<Body> getBodies() {
+    public List<Body> getBodies() {
         return this.bodies;
     }
 

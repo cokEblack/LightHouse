@@ -8,6 +8,7 @@ import newton.physics.collision.CollisionEvent;
 import newton.physics.collision.CollisionListener;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import static newton.util.Math.clamp;
@@ -187,6 +188,7 @@ public class Body {
 
         });
 
+
     }
 
     /**
@@ -205,12 +207,6 @@ public class Body {
      * @param dy
      */
     public void move(float dx, float dy) {
-
-        /*
-        if (dx != 0 || dy != 0) {
-            System.out.println(new Point(dx, dy));
-        }
-        */
 
         Vector position = shape.getPosition();
 
