@@ -7,16 +7,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * https://stackoverflow.com/questions/4152269/why-my-arraylist-is-not-marshalled-with-jaxb
- * https://stackoverflow.com/questions/1074069/format-xml-with-jaxb-during-unmarshal
+ * This class is mainly used to decode XML files that contain the mapping
+ * information for a sprite.
+ *
+ * @author Melf Kammholz
+ * @author Sebastian Regenstein
+ *
  */
 @XmlRootElement(name="SpriteMap")
 @XmlSeeAlso({ SpriteMapping.class })
 public class SpriteMap extends ArrayList<SpriteMapping> {
 
-    public SpriteMap() {
-    }
+    /**
+     * Creates a sprite map.
+     *
+     */
+    public SpriteMap() {}
 
+    /**
+     * Returns a reference to itself.
+     *
+     * @return A reference to itself
+     */
     @XmlElement(name="SpriteMapping")
     public List<SpriteMapping> getSpriteMap() {
         return this;

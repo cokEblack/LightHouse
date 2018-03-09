@@ -7,6 +7,7 @@ import breakout.game.api.Weapon;
 import breakout.game.gameobject.GameObjectBody;
 import breakout.game.gameobject.GameObjectBuilder;
 import breakout.game.gameobject.Health;
+import breakout.game.state.GameState;
 import breakout.game.texture.Texture;
 
 import java.awt.Graphics;
@@ -17,6 +18,7 @@ import java.util.*;
  * does not take any arguments.
  *
  * @author Melf Kammholz
+ * @author Sebastian Regenstein
  *
  */
 public abstract class AbstractGameObject implements GameObject {
@@ -38,7 +40,7 @@ public abstract class AbstractGameObject implements GameObject {
      * The attributes of this GameObject.
      *
      */
-    private GameplayAttributeMap attributes = new GameplayAttributeMap();
+    private Map<Object, GameplayAttribute> attributes = new HashMap<>();
 
     /**
      * The texture of this GameObject.
@@ -55,15 +57,16 @@ public abstract class AbstractGameObject implements GameObject {
      */
     private Map<Object, Object> data = new HashMap<>();
 
-    /**
-     * TODO doc comment
-     */
+    /** Whether this game object is destroyed or not */
     private boolean isDestroyed = false;
 
+    /** Whether this game object is vulnerable or not */
     private boolean isVulnerable = true;
 
+    /** The game object's weapon */
     private Weapon weapon;
 
+    /** A list of game object listeners attached to this game object */
     private List<GameObjectListener> gameObjectListeners = new LinkedList<>();
 
     /**
@@ -73,6 +76,13 @@ public abstract class AbstractGameObject implements GameObject {
      */
     public AbstractGameObject() {}
 
+    /**
+     * Creates a game object using the a builder.
+     *
+     * @param builder A builder which holds the necessary information to create
+     *     this object
+     * @throws IllegalArgumentException if the builder is not provided
+     */
     public AbstractGameObject(GameObjectBuilder builder) {
 
         if (builder == null) {
@@ -114,13 +124,13 @@ public abstract class AbstractGameObject implements GameObject {
 
     @Override
     public Health getHealth() {
-        return (Health) attributes.getAttribute(GameplayAttributeMap.DefaultAttribute.HEALTH);
+        return (Health) attributes.get(Health.class);
     }
 
     @Override
     public void setHealth(Health health) {
 
-        attributes.setAttribute(GameplayAttributeMap.DefaultAttribute.HEALTH, health);
+        attributes.put(Health.class, health);
 
         health.addPropertyChangeListener(event -> {
 
@@ -129,7 +139,7 @@ public abstract class AbstractGameObject implements GameObject {
             }
 
             // If you wanted to implement some kind of resurrection, the destruction
-            // of game objects might not be a good idea.
+            // of game objects might not be a good idea. But for now it has to suffice.
             destroy();
 
         });
@@ -153,6 +163,10 @@ public abstract class AbstractGameObject implements GameObject {
 
     @Override
     public void setData(GameObjectDataProperty key, Object value) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("The key must no be null.");
+        }
 
         if (value == null) {
             throw new IllegalArgumentException("The value must no be null.");
@@ -182,10 +196,12 @@ public abstract class AbstractGameObject implements GameObject {
         health.setCurrentValue(health.getCurrentValue() + healthPoints);
     }
 
+    @Override
     public void setVulnerability(boolean isVulnerable) {
         this.isVulnerable = isVulnerable;
     }
 
+    @Override
     public boolean isVulnerable() {
         return isVulnerable;
     }
@@ -223,7 +239,13 @@ public abstract class AbstractGameObject implements GameObject {
 
     @Override
     public void destroy() {
+
         isDestroyed = true;
+
+        getGameObjectListeners().forEach(gameObjectListener -> {
+            gameObjectListener.onDestroy(new GameObjectEvent(this));
+        });
+
     }
 
     @Override
@@ -234,6 +256,10 @@ public abstract class AbstractGameObject implements GameObject {
     @Override
     public void removeGameObjectListener(GameObjectListener listener) {
         gameObjectListeners.remove(listener);
+    }
+
+    protected List<GameObjectListener> getGameObjectListeners() {
+        return gameObjectListeners;
     }
 
     @Override
@@ -247,18 +273,56 @@ public abstract class AbstractGameObject implements GameObject {
     }
 
     @Override
+    public GameplayAttribute getAttribute(Object name) {
+        return attributes.getOrDefault(name, null);
+    }
+
+    @Override
+    public void setAttribute(Object name, GameplayAttribute attribute) {
+        attributes.put(name, attribute);
+    }
+
+    /**
+     * Returns the attributes of this game object.
+     *
+     * @return The attributes of this game object
+     */
+    protected Map<Object, GameplayAttribute> getAttributes() {
+        return attributes;
+    }
+
+    @Override
+    public void update(int dt, GameState state) {
+
+        getBody().accelerate(dt);
+        getBody().move(dt);
+
+        if (!isDestroyed()) {
+
+            // Regenerate every regenerative game object resource
+            getAttributes().values().forEach(attribute -> {
+                if (!(attribute instanceof RegenerativeGameObjectResource)) return;
+                ((RegenerativeGameObjectResource) attribute).regenerate(dt);
+            });
+
+        }
+
+    }
+
+    @Override
     public void draw(Graphics g) {
 
         if (isDestroyed()) return;
 
         g.drawImage(
-                getTexture().getImage(),
-                (int) getBody().getPosition().getX(),
-                (int) getBody().getPosition().getY(),
-                (int) getBody().getShape().getBounds().getWidth(),
-                (int) getBody().getShape().getBounds().getHeight(),
-                null
+            getTexture().getImage(),
+            (int) getBody().getPosition().getX(),
+            (int) getBody().getPosition().getY(),
+            (int) getBody().getShape().getBounds().getWidth(),
+            (int) getBody().getShape().getBounds().getHeight(),
+            null
         );
+
     }
 
 }

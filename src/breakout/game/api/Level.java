@@ -7,6 +7,8 @@ import breakout.game.GameListener;
  * necessary information a start the level.
  *
  * @author Melf Kammholz
+ * @author Sebastian Regenstein
+ *
  */
 public interface Level {
 

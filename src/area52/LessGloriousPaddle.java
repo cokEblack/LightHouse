@@ -3,6 +3,7 @@ package area52;
 import breakout.game.gameobject.GameObjectBuilder;
 import breakout.game.gameobject.AbstractGameObject;
 import breakout.game.api.Paddle;
+import breakout.game.gameobject.RegenerativeGameObjectResource;
 import breakout.game.io.Keyboard;
 import breakout.game.io.Mouse;
 import breakout.game.state.GameState;
@@ -22,6 +23,8 @@ public class LessGloriousPaddle extends AbstractGameObject implements Paddle {
     @Override
     public synchronized void update(int dt, GameState state) {
 
+        super.update(dt, state);
+
         Keyboard keyboard = state.getKeyboard();
 
         Mouse mouse = state.getMouse();
@@ -34,13 +37,6 @@ public class LessGloriousPaddle extends AbstractGameObject implements Paddle {
         } else {
             getBody().setVelocity(getBody().getVelocity().setX(0));
         }
-
-        getBody().move(dt);
-
-        if (!isDestroyed()) {
-            getHealth().regenerate(dt);
-        }
-
 
     }
 

@@ -14,7 +14,9 @@ public interface Builder <T> {
      * Returns a reference to the object that has been constructed by this builder.
      *
      * @return The object that has been constructed by this builder
+     * @throws InstantiationException If the an exception occurred while building
+     *
      */
-    T build();
+    T build() throws InstantiationException;
 
 }

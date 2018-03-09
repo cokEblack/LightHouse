@@ -1,8 +1,6 @@
-package lighthouse;
+package area52;
 
 import breakout.game.api.GameObjectDataProperty;
-
-import java.awt.*;
 
 /**
  * This enumeration contains any property that has been dynamically
@@ -12,18 +10,15 @@ import java.awt.*;
  * @author Sebastian Regenstein
  *
  */
-public enum LighthouseGameObjectProperty implements GameObjectDataProperty {
+public enum Area52GameObjectProperty implements GameObjectDataProperty {
 
-    /**
-     * The LIGHTHOUSE_FILL_COLOR property is used to colorize the
-     * the pixel that is displayed on the lighthouse.
-     *
-     */
-    LIGHTHOUSE_FILL_COLOR(Color.class);
+    /** A list of properties this plugin adds to the game object */
+    AREA52_IGNI_PARTICLE_HIT_COUNT(Integer.class);
 
+    /** The type of the property */
     private Class type;
 
-    LighthouseGameObjectProperty(Class type) {
+    Area52GameObjectProperty(Class type) {
         this.type = type;
     }
 
@@ -31,4 +26,5 @@ public enum LighthouseGameObjectProperty implements GameObjectDataProperty {
     public Class getType() {
         return type;
     }
+
 }

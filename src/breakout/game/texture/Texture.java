@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
  * it.
  *
  * @author Melf Kammholz
+ * @author Sebastian Regenstein
+ *
  */
 public interface Texture {
 
@@ -16,18 +18,5 @@ public interface Texture {
      * @return The image that should be used as a texture
      */
     BufferedImage getImage();
-
-    /**
-     * Returns the image that should be displayed if an IOException
-     * occurred while loading an image from the filesystem or if the
-     * display is not capable of displaying it.
-     *
-     * The image returned by this method should be constructed without
-     * using any IO operations to limit the exceptions and preventing
-     * any {@code GameObject} from not being displayed.
-     *
-     * @return An image to fallback to if necessary
-     */
-    // BufferedImage getFallbackImage();
 
 }

@@ -3,9 +3,11 @@ package breakout.game.api;
 import breakout.game.Game;
 
 /**
- * A plugin.
+ * A plugin is a compact interface which can add functionality to the game.
  *
  * @author Melf Kammholz
+ * @author Sebastian Regenstein
+ *
  */
 public interface Plugin {
 
@@ -18,6 +20,9 @@ public interface Plugin {
 
     /**
      * Unregisters a plugin.
+     *
+     * This method should do clean up the game if this plugin is removed from
+     * the game dynamically.
      *
      * @param game A game
      */

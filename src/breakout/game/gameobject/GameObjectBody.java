@@ -14,11 +14,23 @@ import newton.physics.collision.CollisionEvent;
  * {@code GameObject}.
  *
  * @author Melf Kammholz
+ * @author Sebastian Regenstein
+ *
  */
 public class GameObjectBody extends Body {
 
+    /** The game object related to this body. */
     private GameObject gameObject;
 
+    /**
+     * Creates a {@code GameObjectBody} with a game object that should be
+     * related to this body, a shape and a mass.
+     *
+     * @param gameObject A game object
+     * @param shape A shape
+     * @param mass A mass
+     *
+     */
     public GameObjectBody(GameObject gameObject, Shape shape, float mass) {
 
         super(shape, mass);
@@ -35,10 +47,22 @@ public class GameObjectBody extends Body {
         this(gameObject, body.getShape(), body.getMass());
     }
 
+    /**
+     * Returns the game object related to this body.
+     *
+     * @return The game object related to this body
+     */
     public GameObject getGameObject() {
         return gameObject;
     }
 
+    /**
+     * Detects collisions of different bodies inside the related world.
+     *
+     * This method adjusts the collision detection to ignore destroyed
+     * game objects.
+     *
+     */
     @Override
     protected void detectCollisions() {
 
@@ -64,12 +88,6 @@ public class GameObjectBody extends Body {
         });
 
 
-    }
-
-    protected void fireCollisionEvent(GameObjectBody target) {
-        getCollisionListeners().forEach((listener) -> {
-            listener.onCollision(new CollisionEvent<GameObjectBody>(this, target));
-        });
     }
 
 }

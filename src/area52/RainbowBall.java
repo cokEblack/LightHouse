@@ -15,14 +15,4 @@ public class RainbowBall extends AbstractGameObject implements Ball {
         super(builder);
     }
 
-    @Override
-    public synchronized void update(int dt, GameState state) {
-
-        getBody().accelerate(dt);
-        getBody().move(dt);
-
-    }
-
-
-
 }

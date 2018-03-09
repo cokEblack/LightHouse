@@ -47,6 +47,10 @@ public class Mouse implements MouseListener, MouseMotionListener {
         return position.getY();
     }
 
+    public Point getPosition() {
+        return position;
+    }
+
     /**
      *
      * @return Returns {@code true}, if any of the mouse buttons is pressed

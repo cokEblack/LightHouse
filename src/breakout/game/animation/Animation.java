@@ -8,15 +8,31 @@ import java.util.List;
  * An animation consists of an ordered collection of frames.
  *
  * @author Melf Kammholz
+ * @author Sebastian Regenstein
+ *
  */
 public class Animation {
 
+    /** The animation timer which changes the frame periodically */
     private AnimationTimer timer;
+
+    /** Whether the animation is playing or not */
     private boolean isPlaying = false;
+
+    /** A list of frames that assemble the animation */
     private List<AnimationFrame> frames = new ArrayList<>();
+
+    /** The current frame index */
     private int frameIndex = 0;
+
+    /** The duration of the animation */
     private int duration;
 
+    /**
+     * Creates an animation with a duration.
+     *
+     * @param duration A duration
+     */
     public Animation(int duration) {
         this.duration = duration;
         timer = new AnimationTimer(this);
@@ -40,19 +56,30 @@ public class Animation {
         return frames;
     }
 
+    /**
+     * Increments the frame index.
+     *
+     */
     public void nextFrame() {
         frameIndex++;
     }
 
+    /**
+     * Returns whether or not the animation is currently playing.
+     *
+     * @return Whether or not the animation is currently playing.
+     */
     public boolean isPlaying() {
         return isPlaying;
     }
 
+    /**
+     * Starts the animation.
+     *
+     */
     public void play() {
 
-        if (isPlaying()) {
-            return;
-        }
+        if (isPlaying()) return;
 
         isPlaying = true;
 
@@ -60,11 +87,13 @@ public class Animation {
 
     }
 
+    /**
+     * Pauses the animation.
+     *
+     */
     public void pause() {
 
-        if (!isPlaying()) {
-            return;
-        }
+        if (!isPlaying()) return;
 
         isPlaying = false;
 

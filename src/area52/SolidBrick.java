@@ -15,8 +15,4 @@ public class SolidBrick extends AbstractGameObject implements Brick {
         super(builder);
     }
 
-    @Override
-    public synchronized void update(int dt, GameState state) {
-    }
-
 }

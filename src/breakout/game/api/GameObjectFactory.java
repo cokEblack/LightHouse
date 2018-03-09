@@ -6,6 +6,7 @@ package breakout.game.api;
  * bricks and paddles.
  *
  * @author Melf Kammholz
+ * @author Sebastian Regenstein
  *
  * @param <T> The type of the {@code GameObject}
  */

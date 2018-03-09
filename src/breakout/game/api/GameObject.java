@@ -3,6 +3,7 @@ package breakout.game.api;
 import breakout.game.Drawable;
 import breakout.game.gameobject.GameObjectBody;
 import breakout.game.gameobject.GameObjectListener;
+import breakout.game.gameobject.GameplayAttribute;
 import breakout.game.gameobject.Health;
 import breakout.game.state.GameState;
 import breakout.game.texture.Texture;
@@ -31,6 +32,7 @@ import breakout.game.texture.Texture;
  * TODO consider moving the update method to a different controller which acts a controller for this GameObject. The game object would serve solely as a model (a pure data representation).
  *
  * @author Melf Kammholz
+ * @author Sebastian Regenstein
  *
  */
 public interface GameObject extends Drawable {
@@ -147,18 +149,20 @@ public interface GameObject extends Drawable {
     /**
      * Sets data which is associated with this game object.
      *
-     * This method should throw an {@code IllegalArgumentException} if
-     * the key is already in use, to prevent overwrite data which might
-     * be important for other plugins.
+     * This method uses the {@code GameObjectDataProperty} interface to check if
+     * a value is an instance of the class, that is provided by the key.
      *
      * @param key A key which should grant access to the deposited data
      * @param value A value which should be associated with this game object
-     * @throws IllegalArgumentException If the key is already in use.
+     * @throws IllegalArgumentException If the key is null
+     *
      */
     void setData(GameObjectDataProperty key, Object value);
 
     /**
      * Checks if a game object is destroyed.
+     *
+     * Any game object that is destroyed and be considered dead.
      *
      * This method is mainly used as workaround for the destruction of game
      * objects inside collision listeners. As there is not immediate access
@@ -167,14 +171,15 @@ public interface GameObject extends Drawable {
      *
      * @return Returns {@code true} if the game object is destroyed, else
      *     {@code false}
+     *
      */
     boolean isDestroyed();
 
     /**
      * Sets the destruction flag.
      *
-     * Any game object, which is destroyed, should be safely removed from
-     * the game state.
+     * Any game object, which is destroyed, should be safely removed from the
+     * game state.
      *
      */
     void destroy();
@@ -208,12 +213,28 @@ public interface GameObject extends Drawable {
     Weapon getWeapon();
 
     /**
+     * Returns the attribute that has been queried.
+     *
+     * @param name Name of the attribute
+     * @return An attribute
+     *
+     */
+    GameplayAttribute getAttribute(Object name);
+
+    /**
+     * Sets an attribute.
+     *
+     * @param name Name of the attribute
+     * @param attribute The attribute object
+     */
+    void setAttribute(Object name, GameplayAttribute attribute);
+
+    /**
      * Updates the {@code GameObject}.
      *
-     * The update method should be invoked each time a global
-     * update method is invoked. In other words, this object
-     * will be updated each time any other {@code GameObject}
-     * will be updated. This can result in any sort of
+     * The update method should be invoked each time a global update method is
+     * invoked. In other words, this object will be updated each time any other
+     * {@code GameObject} will be updated. This can result in any sort of
      * interaction with different {@code GameObject}s.
      *
      * @param dt The time passed since the last update

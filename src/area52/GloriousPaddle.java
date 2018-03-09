@@ -56,6 +56,8 @@ public class GloriousPaddle extends AbstractGameObject implements Paddle {
     @Override
     public synchronized void update(int dt, GameState state) {
 
+        super.update(dt, state);
+
         Keyboard keyboard = state.getKeyboard();
 
         if (keyboard.isKeyPressed(KeyEvent.VK_A)) {
@@ -65,9 +67,6 @@ public class GloriousPaddle extends AbstractGameObject implements Paddle {
         } else {
             getBody().setVelocity(getBody().getVelocity().setX(0));
         }
-
-        getBody().move(dt);
-
 
     }
 }

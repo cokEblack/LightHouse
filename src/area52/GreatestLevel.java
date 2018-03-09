@@ -17,6 +17,7 @@ import newton.physics.World;
 import newton.physics.collision.CollisionEvent;
 import newton.physics.collision.CollisionListener;
 import newton.physics.collision.WorldBorderCollisionAdapter;
+import unitframeplugin.UnitFrameGameObjectProperty;
 import unitframeplugin.UnitFramePlugin;
 
 import javax.imageio.ImageIO;
@@ -159,6 +160,8 @@ public class GreatestLevel implements Level {
 
         gameListener = new GameListener() {
 
+            private IgniAbility igni;
+
             @Override
             public void onCreate(GameLoopEvent gameLoopEvent) {
 
@@ -181,6 +184,9 @@ public class GreatestLevel implements Level {
                     }
 
                 });
+                GameObjectResource paddleAdrenaline = new Adrenaline(10, 10, 0.0002f);
+                paddle.setAttribute(Adrenaline.class, paddleAdrenaline);
+                paddle.setData(UnitFrameGameObjectProperty.UNIT_FRAME_SECONDARY_RESOURCE, paddleAdrenaline);
 
                 Ball ball = level.createBallFactory().create();
                 ball.getBody().setPosition(100, 100);
@@ -296,6 +302,8 @@ public class GreatestLevel implements Level {
                 });
 
                 QuenAbility quen = new QuenAbility(paddle);
+                DrinkSwallowAbility swallow = new DrinkSwallowAbility(paddle);
+                igni = new IgniAbility(paddle, game.getGameState());
 
                 game.getWindow().addKeyListener(new KeyAdapter() {
 
@@ -307,12 +315,35 @@ public class GreatestLevel implements Level {
 
                 });
 
-                game.addPlugin(new LighthousePlugin());
-                game.addPlugin(new UnitFramePlugin());
+                game.getWindow().addKeyListener(new KeyAdapter() {
 
-                UnitFramePlugin unitFramePlugin = (UnitFramePlugin) game.getPlugin(UnitFramePlugin.class);
+                    @Override
+                    public void keyReleased(KeyEvent event) {
+                        if (event.getKeyCode() != KeyEvent.VK_2) return;
+                        swallow.apply(null);
+                    }
+
+                });
+
+
+
+                game.addPlugin(new LighthousePlugin());
+
+                // Setup UnitFramePlugin and display paddle
+                UnitFramePlugin unitFramePlugin = new UnitFramePlugin();
+                game.addPlugin(unitFramePlugin);
                 unitFramePlugin.getUnitFrame().setUnit(paddle);
 
+
+            }
+
+
+            @Override
+            public void onUpdate(GameLoopEvent event) {
+
+                if (event.getGameState().getKeyboard().isKeyPressed(KeyEvent.VK_3)) {
+                    igni.apply(null);
+                }
 
             }
 
@@ -322,19 +353,38 @@ public class GreatestLevel implements Level {
 
     @Override
     public GameObjectFactory<Paddle> createPaddleFactory() {
-        return () -> paddleBuilder.build();
+        return () -> {
+            try {
+                return paddleBuilder.build();
+            } catch (InstantiationException exception) {
+                throw new RuntimeException(exception);
+            }
+        };
     }
 
     @Override
     public GameObjectFactory<Ball> createBallFactory() {
-        return () -> ballBuilder.build();
+        return () -> {
+            try {
+                return ballBuilder.build();
+            } catch (InstantiationException exception) {
+                throw new RuntimeException(exception);
+            }
+        };
     }
 
     @Override
     public GameObjectFactory<Brick> createBrickFactory() {
-        return () -> brickBuilder.build();
+        return () -> {
+            try {
+                return brickBuilder.build();
+            } catch (InstantiationException exception) {
+                throw new RuntimeException(exception);
+            }
+        };
     }
 
+    @Override
     public GameListener getGameListener() {
         return gameListener;
     }
